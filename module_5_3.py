@@ -18,58 +18,48 @@ class House:
         return self.number_of_floors
 
     def __eq__(self, other):
-        if isinstance(other, House) or isinstance(other, int):
+        if isinstance(other, House):
+            return self.number_of_floors == other.number_of_floors
+        elif isinstance(other, int):
             return self.number_of_floors == other
         else:
             return NotImplemented
 
     def __lt__(self, other):
-        if isinstance(other, House) or isinstance(other, int):
+        if isinstance(other, House):
+            return self.number_of_floors < other.number_of_floors
+        elif isinstance(other, int):
             return self.number_of_floors < other
         else:
             return NotImplemented
 
     def __le__(self, other):
-        if isinstance(other, House) or isinstance(other, int):
-            return self.number_of_floors <= other
-        else:
-            return NotImplemented
+        return self.__eq__(other) or self.__lt__(other)
 
     def __gt__(self, other):
-        if isinstance(other, House) or isinstance(other, int):
-            return self.number_of_floors > other
-        else:
-            return NotImplemented
+        return not self.__le__(other)
 
     def __ge__(self, other):
-        if isinstance(other, House) or isinstance(other, int):
-            return self.number_of_floors >= other
-        else:
-            return NotImplemented
+        return not self.__lt__(other)
 
     def __ne__(self, other):
-        if isinstance(other, House) or isinstance(other, int):
-            return self.number_of_floors != other
+        return not self.__eq__(other)
+
+    def __add__(self, other):
+        if isinstance(other, int):
+            self.number_of_floors += other
+            return self
+        elif isinstance(other, House):
+            self.number_of_floors += other.number_of_floors
+            return self
         else:
             return NotImplemented
 
-    def __add__(self, value):
-        if isinstance(value, int):
-            return House(self.name, self.number_of_floors.__add__(value))
-        else:
-            return NotImplemented
+    def __radd__(self, other):
+        return self.__add__(other)
 
-    def __radd__(self, value):
-        if isinstance(value, int):
-            return House(self.name, self.number_of_floors.__add__(value))
-        else:
-            return NotImplemented
-
-    def __iadd__(self, value):
-        if isinstance(value, int):
-            return House(self.name, self.number_of_floors.__add__(value))
-        else:
-            return NotImplemented
+    def __iadd__(self, other: int):
+        return self.__add__(other)
 
 
 h1 = House('ЖК Эльбрус', 10)
@@ -95,4 +85,3 @@ print(h1 >= h2)  # __ge__
 print(h1 < h2)  # __lt__
 print(h1 <= h2)  # __le__
 print(h1 != h2)  # __ne__
-# print(h1 != 30)  # дополнение к коду для рассмотрения влияния проверок на принадлежность классам int, House
